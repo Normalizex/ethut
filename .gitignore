@@ -130,3 +130,5 @@ out
 
 *.lock
 dist/
+dist/index.js
+dist/utils/ERC20.js
