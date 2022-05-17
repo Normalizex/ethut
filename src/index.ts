@@ -13,5 +13,4 @@ class Ethut{
     }
 }
 
-
 export default Ethut;

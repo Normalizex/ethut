@@ -27,6 +27,7 @@ class ERC20Utils{
      * @returns decimals number
     */
     getDecimals =  async (contractAddress: string) => {
+        if (this._NETWORK_COINS.includes(contractAddress.toLocaleLowerCase())) return 18;
         const abi = new this._web3.eth.Contract([{
             inputs: [],
             name: "decimals",
@@ -54,7 +55,7 @@ class ERC20Utils{
             type: "function",
         }], contractAddress);
 
-        const balance = this._NETWORK_COINS.includes(contractAddress)
+        const balance = this._NETWORK_COINS.includes(contractAddress.toLocaleLowerCase())
             ? await this._web3.eth.getBalance(holderAddress).catch(() => undefined)
             : await contract.methods.balanceOf(holderAddress).call().catch(() => undefined);
         
