@@ -82,7 +82,7 @@ class ERC20Utils{
         }], contract);
 
         const allowance = await abi.methods.allowance(address, recipient).call().catch(() => undefined);
-        if (allowance || isNaN(Number(allowance))) throw new Error('Invalid contract address or non-standart abi');
+        if (!allowance || isNaN(Number(allowance))) throw new Error('Invalid contract address or non-standart abi');
     
         return String(allowance);
     };
