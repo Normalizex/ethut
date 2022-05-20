@@ -2,7 +2,7 @@ import Web3 from "web3";
 
 import ERC20Utils from "./utils/ERC20";
 
-class Ethut{
+export class Ethut{
     private  _web3;
 
     public erc20;
@@ -12,5 +12,3 @@ class Ethut{
         this.erc20 = new ERC20Utils(this._web3);
     }
 }
-
-export default Ethut;

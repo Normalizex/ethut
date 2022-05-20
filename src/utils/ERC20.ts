@@ -14,7 +14,7 @@ class ERC20Utils{
             outputs: [{ internalType: "string", name: "", type: "string" }],
             stateMutability: "view",
             type: "function"
-        }], contractAddress);
+        }], this._web3.utils.toChecksumAddress(contractAddress));
 
         const symbol = await abi.methods.symbol().call().catch(() => undefined);
         if (!symbol) throw new Error('Invalid contract address or non-standart abi');
@@ -53,7 +53,7 @@ class ERC20Utils{
             outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
             stateMutability: "view",
             type: "function",
-        }], contractAddress);
+        }], this._web3.utils.toChecksumAddress(contractAddress));
 
         const balance = this._NETWORK_COINS.includes(contractAddress.toLocaleLowerCase())
             ? await this._web3.eth.getBalance(holderAddress).catch(() => undefined)
@@ -79,13 +79,39 @@ class ERC20Utils{
             name: "allowance",
             outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
             stateMutability: "view", type: "function"
-        }], contract);
+        }], this._web3.utils.toChecksumAddress(contract));
 
         const allowance = await abi.methods.allowance(address, recipient).call().catch(() => undefined);
         if (!allowance || isNaN(Number(allowance))) throw new Error('Invalid contract address or non-standart abi');
     
         return String(allowance);
     };
+
+    /**
+     * @param recipient - Contract address for interaction
+     * @param contract - The contract of the token that will be asked for get allowance
+     * @param amount - amount in string numbers
+     * @returns input data for sign
+     */
+    approve = (recipient: string, contract: string, amount: string='115792089237316195423570985008687907853269984665640564039457584007913129639935') => {
+        if (this._NETWORK_COINS.includes(contract)) throw new Error(`Network coin does not require approving`);
+        const abi = new this._web3.eth.Contract([{ 
+            inputs: [
+                { internalType: "address", name: "spender", type: "address" },
+                { internalType: "uint256", name: "amount", type: "uint256" }],
+            name: "approve",
+            outputs: [{ internalType: "bool", name: "", type: "bool" }],
+            stateMutability: "nonpayable",
+            type: "function" 
+        }], this._web3.utils.toChecksumAddress(contract));
+
+        const approve = abi.methods.approve(
+            this._web3.utils.toChecksumAddress(recipient),
+            this._web3.utils.toHex(amount)
+        );
+
+        return approve.encodeABI() as string;
+    }
 
     constructor(web3: Web3){
         this._web3 = web3;

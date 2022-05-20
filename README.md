@@ -14,7 +14,7 @@ yarn add @normalizex/ethut
 ***
 # Usage:
 ```js
-import Ethut from '@normalizex/ethut';
+import { Ethut } from '@normalizex/ethut';
 
 const web3 = new Web3('ProviderURL');
 const ethut = new Ethut(web3 || 'Provider URL');
@@ -26,6 +26,7 @@ const ethut = new Ethut(web3 || 'Provider URL');
     - balanceOf
     - getDecimals
     - getSymbol
+    - approve
 ***
 # Donate
 Of course, the project was made not for any benefit, but for my personal convenience 😃
